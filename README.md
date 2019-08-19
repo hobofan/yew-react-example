@@ -4,7 +4,7 @@ This template shows how to create a web app using a React component inside a Yew
 
 ## 🚴 Usage
 
-### 🛠️ Build with npm run build`
+### 🛠️ Build with `npm run build`
 
 ```
 yarn run build
@@ -38,7 +38,7 @@ Inside [src/react.rs](./src/react.rs) you can find the Yew component `ReactCount
 
 In the `create` function, we [create a new element](https://docs.rs/stdweb/0.4.18/stdweb/web/struct.Document.html#method.create_element), which we will later use to render the React component into:
 
-```rs
+```rust
 fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
     ReactCounter {
         // ...
@@ -54,7 +54,7 @@ fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
 
 We also create a [Callback](https://docs.rs/yew/0.8.0/yew/callback/struct.Callback.html) wrapper, which we need to create a Message for our Component from a JS callback:
 
-```rs
+```rust
 fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
     ReactCounter {
         // ...
@@ -67,7 +67,7 @@ fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
 #### Rendering the component (fn view)
 
 First we create a closure, that triggers our Callback wrapper, which we can use in the `js!` macro:
-```rs
+```rust
 impl Renderable<ReactCounter> for ReactCounter {
     fn view(&self) -> Html<Self> {
         let orig_callback = self.react_counter_cb.clone();
@@ -75,10 +75,11 @@ impl Renderable<ReactCounter> for ReactCounter {
         // ...
     }
 }
+```
 
 We prepare a label with the counter that we will then pass to the React component as a prop:
 
-```rs
+```rust
 impl Renderable<ReactCounter> for ReactCounter {
     fn view(&self) -> Html<Self> {
         // ...
@@ -89,6 +90,7 @@ impl Renderable<ReactCounter> for ReactCounter {
         // ...
     }
 }
+```
 
 Now we come to the rendering of the React component.
 
@@ -97,7 +99,7 @@ As a second argument we pass in the props as an object that contains both our la
 
 We then use `ReactDOM.render` to render the React element into the Node we created earlier.
 
-```rs
+```rust
 impl Renderable<ReactCounter> for ReactCounter {
     fn view(&self) -> Html<Self> {
         // ...
@@ -113,20 +115,22 @@ impl Renderable<ReactCounter> for ReactCounter {
         // ...
     }
 }
+```
 
 Lastly we return the node we are rendering into as a virtual DOM reference from the `view` function, so the Yew renderer knows where to attach it to in the Yew component tree.
 
-```rs
+```rust
 impl Renderable<ReactCounter> for ReactCounter {
     fn view(&self) -> Html<Self> {
         // ...
         yew::virtual_dom::VNode::VRef(self.node.clone())
     }
 }
+```
 
 Here is a complete view of the `view` function:
 
-```rs
+```rust
 impl Renderable<ReactCounter> for ReactCounter {
     fn view(&self) -> Html<Self> {
         // Wrap callback in a closure that we can use in the js! macro
