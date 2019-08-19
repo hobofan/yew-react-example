@@ -1,7 +1,7 @@
 [package]
-name = "yew-wasm-pack-template"
+name = "yew-react-example"
 version = "0.1.0"
-authors = ["Justin Starry <justin.starry@icloud.com"]
+authors = ["Maximilian Goisser <goisser94@gmail.com"]
 edition = "2018"
 
 [lib]
@@ -12,13 +12,11 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 log = "0.4"
-strum = "0.13"
-strum_macros = "0.13"
 serde = "1"
 serde_derive = "1"
 wasm-bindgen = "=0.2.42"
 web_logger = "0.2"
-yew = "0.7"
+yew = "0.8"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -30,6 +28,7 @@ console_error_panic_hook = { version = "0.1.6", optional = true }
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
 wee_alloc = { version = "0.4.4", optional = true }
+stdweb = "0.4.18"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
