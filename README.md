@@ -32,7 +32,7 @@ Additionally we include `material-ui` so that we have some components available 
 
 ### Yew component that uses a React component
 
-Inside [src/react.rs](./src/react.rs) you can find the Yew component `ReactCounter` that internally uses a React component to display a button with an incrmenting counter.
+Inside [src/react.rs](./src/react.rs) you can find the Yew component `ReactCounter` that internally uses a React component to display a button with an incrementing counter.
 
 #### Constructor (fn create)
 
