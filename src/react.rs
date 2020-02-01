@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 use stdweb::js;
 use stdweb::web::Node;
-use yew::{Callback, Component, ComponentLink, Html, Properties, Renderable, ShouldRender};
+use yew::{Callback, Component, ComponentLink, Html, Properties, ShouldRender};
 
 pub struct ReactCounter {
     node: Node,
@@ -57,10 +57,8 @@ impl Component for ReactCounter {
         self.props = props;
         true
     }
-}
 
-impl Renderable<ReactCounter> for ReactCounter {
-    fn view(&self) -> Html<Self> {
+    fn view(&self) -> Html {
         // Wrap callback in a closure that we can use in the js! macro
         let orig_callback = self.react_counter_cb.clone();
         let callback = move || orig_callback.emit(());
@@ -85,6 +83,6 @@ impl Renderable<ReactCounter> for ReactCounter {
 
 impl ReactCounter {
     fn link_react_counter_cb(link: &mut ComponentLink<Self>) -> Callback<()> {
-        link.send_back(|_| Msg::Increment)
+        link.callback(|_| Msg::Increment)
     }
 }

@@ -1,6 +1,7 @@
 use yew::prelude::*;
 
 pub struct NativeCounter {
+    link: ComponentLink<Self>,
     props: NativeCounterProps,
     native_counter: usize,
 }
@@ -21,8 +22,9 @@ impl Component for NativeCounter {
     type Message = Msg;
     type Properties = NativeCounterProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         NativeCounter {
+            link,
             props,
             native_counter: 0,
         }
@@ -44,16 +46,15 @@ impl Component for NativeCounter {
         self.props = props;
         true
     }
-}
 
-impl Renderable<NativeCounter> for NativeCounter {
-    fn view(&self) -> Html<Self> {
+    fn view(&self) -> Html {
         let label = format!(
             "Native count: {} - React count: {}",
             self.native_counter, self.props.react_counter
         );
+        let onclick = self.link.callback(|_| Msg::Increment);
         html! {
-            <button onclick=|_| Msg::Increment>{label}</button>
+            <button onclick=onclick>{label}</button>
         }
     }
 }
