@@ -2,7 +2,7 @@
 
 This template shows how to create a web app using a React component inside a Yew component.
 
-Similar to `yew`, this uses `web_sys` by default, but there is also a `stdweb variant`.
+Similar to `yew`, this uses `web_sys` by default, but there is also a `stdweb` variant.
 
 ## 🚴 Usage
 
@@ -34,7 +34,7 @@ Additionally we include `material-ui` so that we have some components available 
 
 ### Yew component that uses a React component
 
-Inside [src/react.rs](./src/react.rs) you can find the Yew component `ReactCounter` that internally uses a React component to display a button with an incrementing counter.
+Inside [src/react.rs](./src/react.rs) (`web_sys` variant) [src/react_stdweb.rs](./src/react_stdweb.rs) (`stdweb` variant) you can find the Yew component `ReactCounter` that internally uses a React component to display a button with an incrementing counter.
 
 #### Constructor (fn create)
 
