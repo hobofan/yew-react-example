@@ -2,6 +2,8 @@
 
 This template shows how to create a web app using a React component inside a Yew component.
 
+Similar to `yew`, this uses `web_sys` by default, but there is also a `stdweb variant`.
+
 ## 🚴 Usage
 
 ### 🛠️ Build with `npm run build`
@@ -38,6 +40,25 @@ Inside [src/react.rs](./src/react.rs) you can find the Yew component `ReactCount
 
 In the `create` function, we [create a new element](https://docs.rs/stdweb/0.4.18/stdweb/web/struct.Document.html#method.create_element), which we will later use to render the React component into:
 
+##### web_sys variant
+```rust
+fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
+    ReactCounter {
+        // ...
+        node: Node::from(
+            web_sys::window()
+                .unwrap()
+                .document()
+                .unwrap()
+                .create_element("div")
+                .unwrap(),
+        ),
+        // ...
+    }
+}
+```
+
+##### stdweb variant
 ```rust
 fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
     ReactCounter {
@@ -52,7 +73,7 @@ fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
 }
 ```
 
-We also create a [Callback](https://docs.rs/yew/0.8.0/yew/callback/struct.Callback.html) wrapper, which we need to create a Message for our Component from a JS callback:
+We also create a [Callback](https://docs.rs/yew/0.16.0/yew/callback/struct.Callback.html) wrapper, which we need to create a Message for our Component from a JS callback:
 
 ```rust
 fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
@@ -64,7 +85,7 @@ fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
 }
 ```
 
-#### Rendering the component (fn view)
+#### Rendering the component (fn view) (stdweb variant)
 
 First we create a closure, that triggers our Callback wrapper, which we can use in the `js!` macro:
 ```rust

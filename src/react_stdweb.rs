@@ -1,6 +1,6 @@
-use wasm_bindgen::prelude::*;
-use web_sys::Node;
-use yew::virtual_dom::VNode;
+use std::convert::TryInto;
+use stdweb::js;
+use stdweb::web::Node;
 use yew::{Callback, Component, ComponentLink, Html, Properties, ShouldRender};
 
 pub struct ReactCounter {
@@ -27,14 +27,11 @@ impl Component for ReactCounter {
     fn create(props: Self::Properties, mut link: ComponentLink<Self>) -> Self {
         ReactCounter {
             // Creating an element that we can render the React component into later
-            node: Node::from(
-                web_sys::window()
-                    .unwrap()
-                    .document()
-                    .unwrap()
-                    .create_element("div")
-                    .unwrap(),
-            ),
+            node: stdweb::web::document()
+                .create_element("div")
+                .unwrap()
+                .try_into()
+                .unwrap(),
             props,
             // Creating a wrapper for the counter callback
             react_counter_cb: Self::link_react_counter_cb(&mut link),
@@ -60,25 +57,26 @@ impl Component for ReactCounter {
     }
 
     fn view(&self) -> Html {
+        // Wrap callback in a closure that we can use in the js! macro
+        let orig_callback = self.react_counter_cb.clone();
+        let callback = move || orig_callback.emit(());
+
         let label = format!(
             "Native count: {} - React count: {}",
             self.props.native_counter, self.react_counter
         );
-        render_material_ui_chip(&self.node, label, self.react_counter_cb.clone());
+        js! {
+            let element = React.createElement(MaterialUI.Chip,
+                {
+                  label: @{label},
+                  onClick: () => @{callback}(),
+                }
+              );
+            ReactDOM.render(element, @{self.node.clone()});
+        }
 
-        VNode::VRef(self.node.clone())
+        yew::virtual_dom::VNode::VRef(self.node.clone())
     }
-}
-
-#[wasm_bindgen(module = "/src/react.js")]
-extern "C" {
-    #[wasm_bindgen(js_name = "render_material_ui_chip")]
-    fn render_material_ui_chip_js(node: &Node, label: String, on_click: JsValue);
-}
-
-fn render_material_ui_chip(node: &Node, label: String, on_click: Callback<()>) {
-    let callback = Closure::once_into_js(move || on_click.emit(()));
-    render_material_ui_chip_js(node, label, callback)
 }
 
 impl ReactCounter {

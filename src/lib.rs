@@ -2,8 +2,14 @@
 
 mod app;
 mod native;
-mod react;
 mod utils;
+
+#[cfg(feature = "std_web")]
+mod react_stdweb;
+#[cfg(feature = "std_web")]
+use react_stdweb as react;
+#[cfg(not(feature = "std_web"))]
+mod react;
 
 use wasm_bindgen::prelude::*;
 

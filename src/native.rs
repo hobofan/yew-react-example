@@ -8,9 +8,7 @@ pub struct NativeCounter {
 
 #[derive(Properties, Clone)]
 pub struct NativeCounterProps {
-    #[props(required)]
     pub react_counter: usize,
-    #[props(required)]
     pub on_native_counter_change: Callback<usize>,
 }
 

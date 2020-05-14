@@ -7,16 +7,13 @@ edition = "2018"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-[features]
-default = ["console_error_panic_hook"]
-
 [dependencies]
 log = "0.4"
 serde = "1"
 serde_derive = "1"
 wasm-bindgen = "0.2.58"
 web_logger = "0.2"
-yew = "0.11"
+yew = { version = "0.16", default-features = false }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -28,7 +25,16 @@ console_error_panic_hook = { version = "0.1.6", optional = true }
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
 wee_alloc = { version = "0.4.4", optional = true }
-stdweb = "0.4.20"
+
+stdweb = { version = "0.4.20", optional = true }
+web-sys = { version = "0.3.39", optional = true }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
+
+[features]
+default = ["web_sys", "common"]
+common = ["console_error_panic_hook"]
+
+web_sys = ["web-sys", "yew/web_sys"]
+std_web = ["stdweb", "yew/std_web"]
