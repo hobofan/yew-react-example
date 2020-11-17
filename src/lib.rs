@@ -10,6 +10,8 @@ mod react_stdweb;
 use react_stdweb as react;
 #[cfg(not(feature = "std_web"))]
 mod react;
+#[cfg(not(feature = "std_web"))]
+pub mod react_button;
 
 use wasm_bindgen::prelude::*;
 
@@ -22,8 +24,8 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 // This is the entry point for the web app
 #[wasm_bindgen]
 pub fn run_app() -> Result<(), JsValue> {
-    utils::set_panic_hook();
+    // utils::set_panic_hook();
     web_logger::init();
-    yew::start_app::<app::App>();
+    // yew::start_app::<app::App>();
     Ok(())
 }
